@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Summarizer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Summarizer</h1>
+      <p>Paste text or upload a PDF or photo. Pick a length and tone, then get the short version.</p>
+    </header>
+
+    <form id="form">
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" class="tab active" data-mode="text" aria-selected="true">Paste text</button>
+        <button type="button" role="tab" class="tab" data-mode="file" aria-selected="false">Upload PDF or photo</button>
+      </div>
+
+      <div id="pane-text" class="pane">
+        <label for="text" class="sr-only">Text to summarize</label>
+        <textarea id="text" name="text" rows="10" placeholder="Paste an article or a long email here"></textarea>
+        <div class="count"><span id="count">0</span> words</div>
+      </div>
+
+      <div id="pane-file" class="pane" hidden>
+        <label id="drop" for="file">
+          <input type="file" id="file" name="file" accept=".pdf,image/png,image/jpeg,image/gif,image/webp">
+          <span id="drop-title">Choose a file or drop it here</span>
+          <span class="hint">PDF, PNG, JPG, GIF or WebP, up to {{ max_mb }} MB</span>
+        </label>
+        <img id="preview" alt="Preview of the uploaded image" hidden>
+      </div>
+
+      <div class="options">
+        <fieldset>
+          <legend>Length</legend>
+          <label><input type="radio" name="length" value="short"> Short</label>
+          <label><input type="radio" name="length" value="medium" checked> Medium</label>
+          <label><input type="radio" name="length" value="long"> Long</label>
+          <label><input type="radio" name="length" value="bullets"> Bullets</label>
+        </fieldset>
+        <div class="field">
+          <label for="tone">Tone</label>
+          <select id="tone" name="tone">
+            <option value="neutral">Neutral</option>
+            <option value="formal">Formal</option>
+            <option value="casual">Casual</option>
+            <option value="simple">Simple</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" id="go">Summarize</button>
+    </form>
+
+    <p id="error" role="alert" hidden></p>
+
+    <section id="result" hidden aria-live="polite">
+      <div class="result-head">
+        <h2>Summary</h2>
+        <button type="button" id="copy">Copy</button>
+      </div>
+      <div id="summary"></div>
+    </section>
+
+    <footer>
+      <a href="/prompts">Download prompt log (prompts_log.md)</a>
+    </footer>
+  </main>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
